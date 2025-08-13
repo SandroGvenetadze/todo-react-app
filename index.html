@@ -6,53 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My ToDo List</title>
     <meta name="color-scheme" content="light dark" />
-
-    <script>
-      (function () {
-        try {
-          const saved = localStorage.getItem("theme");
-          const prefersDark =
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches;
-          const theme = saved || (prefersDark ? "dark" : "light");
-          document.documentElement.setAttribute("data-theme", theme);
-        } catch (e) {}
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-      <span class="emoji" id="theme-emoji">🌙</span>
-      <span id="theme-label">Dark</span>
-    </button>
-    <script type="module">
-      const html = document.documentElement;
-      const btn = document.getElementById("theme-toggle");
-      const label = document.getElementById("theme-label");
-      const emoji = document.getElementById("theme-emoji");
-      function sync() {
-        const t = html.getAttribute("data-theme") || "light";
-        if (t === "dark") {
-          label.textContent = "Light";
-          emoji.textContent = "🌞";
-        } else {
-          label.textContent = "Dark";
-          emoji.textContent = "🌙";
-        }
-      }
-      sync();
-      btn.addEventListener("click", () => {
-        const current = html.getAttribute("data-theme") || "light";
-        const next = current === "dark" ? "light" : "dark";
-        html.setAttribute("data-theme", next);
-        try {
-          localStorage.setItem("theme", next);
-        } catch (e) {}
-        sync();
-      });
-    </script>
   </body>
 </html>
