@@ -5,82 +5,10 @@
     <link rel="icon" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My ToDo List</title>
-
-    <!-- Theme stylesheet (kept in /public so no bundler changes) -->
-    <link rel="stylesheet" href="/theme.css" />
-
     <meta name="color-scheme" content="light dark" />
-    <script>
-      // Set initial theme from localStorage or system preference
-      (function () {
-        const saved = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches;
-        const theme = saved || (prefersDark ? "dark" : "light");
-        document.documentElement.setAttribute("data-theme", theme);
-      })();
-    </script>
-
-    <style>
-      /* Small, unobtrusive toggle in top-right */
-      .theme-toggle {
-        position: fixed;
-        top: 12px;
-        right: 12px;
-        width: 34px;
-        height: 34px;
-        border-radius: 8px;
-        border: 1px solid var(--border, #e2e8f0);
-        background: var(--surface, #fff);
-        color: var(--text, #111);
-        font-size: 16px;
-        cursor: pointer;
-        display: grid;
-        place-items: center;
-        z-index: 1000;
-        transition: background 0.2s, color 0.2s, border-color 0.2s,
-          transform 0.12s;
-      }
-      .theme-toggle:hover {
-        transform: translateY(-1px);
-      }
-      html[data-theme="dark"] .theme-toggle {
-        background: var(--surface, #111827);
-        color: var(--text, #e5e7eb);
-        border-color: var(--border, #374151);
-      }
-    </style>
   </head>
   <body>
     <div id="root"></div>
-
-    <!-- Tiny toggle button -->
-    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-      🌙
-    </button>
-
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      // Toggle theme and persist
-      (function () {
-        const html = document.documentElement;
-        const btn = document.getElementById("theme-toggle");
-        const sync = () => {
-          const t = html.getAttribute("data-theme");
-          btn.textContent = t === "dark" ? "🌞" : "🌙";
-        };
-        btn.addEventListener("click", () => {
-          const next =
-            (html.getAttribute("data-theme") || "light") === "dark"
-              ? "light"
-              : "dark";
-          html.setAttribute("data-theme", next);
-          localStorage.setItem("theme", next);
-          sync();
-        });
-        sync();
-      })();
-    </script>
   </body>
 </html>
