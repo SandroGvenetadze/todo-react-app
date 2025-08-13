@@ -5,10 +5,13 @@
     <link rel="icon" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My ToDo List</title>
-    <meta name="color-scheme" content="light dark" />
 
+    <!-- Theme stylesheet (kept in /public so no bundler changes) -->
+    <link rel="stylesheet" href="/theme.css" />
+
+    <meta name="color-scheme" content="light dark" />
     <script>
-      // Set theme from localStorage or system preference
+      // Set initial theme from localStorage or system preference
       (function () {
         const saved = localStorage.getItem("theme");
         const prefersDark = window.matchMedia(
@@ -20,64 +23,53 @@
     </script>
 
     <style>
-      /* Dark mode via filter only on #root (non-invasive) */
-      html[data-theme="dark"] #root {
-        filter: invert(1) hue-rotate(180deg);
-      }
-      /* Revert media so images/icons don't look inverted */
-      html[data-theme="dark"] #root img,
-      html[data-theme="dark"] #root video,
-      html[data-theme="dark"] #root picture,
-      html[data-theme="dark"] #root iframe,
-      html[data-theme="dark"] #root canvas,
-      html[data-theme="dark"] #root svg {
-        filter: invert(1) hue-rotate(180deg);
-      }
-
-      /* Small toggle button in the top-right (outside #root) */
+      /* Small, unobtrusive toggle in top-right */
       .theme-toggle {
         position: fixed;
         top: 12px;
         right: 12px;
-        width: 32px;
-        height: 32px;
-        border-radius: 6px;
-        border: 1px solid #c9ccd1;
-        background: #ffffff;
-        color: #111;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid var(--border, #e2e8f0);
+        background: var(--surface, #fff);
+        color: var(--text, #111);
         font-size: 16px;
         cursor: pointer;
         display: grid;
         place-items: center;
         z-index: 1000;
-      }
-      html[data-theme="dark"] .theme-toggle {
-        background: #1f2937;
-        color: #e5e7eb;
-        border-color: #374151;
+        transition: background 0.2s, color 0.2s, border-color 0.2s,
+          transform 0.12s;
       }
       .theme-toggle:hover {
-        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+      html[data-theme="dark"] .theme-toggle {
+        background: var(--surface, #111827);
+        color: var(--text, #e5e7eb);
+        border-color: var(--border, #374151);
       }
     </style>
   </head>
   <body>
     <div id="root"></div>
 
-    <!-- Small theme toggle (outside #root so filters don't affect it) -->
+    <!-- Tiny toggle button -->
     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-      🌓
+      🌙
     </button>
 
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Toggle theme and save
+      // Toggle theme and persist
       (function () {
         const html = document.documentElement;
         const btn = document.getElementById("theme-toggle");
-        const setEmoji = () =>
-          (btn.textContent =
-            html.getAttribute("data-theme") === "dark" ? "🌞" : "🌙");
+        const sync = () => {
+          const t = html.getAttribute("data-theme");
+          btn.textContent = t === "dark" ? "🌞" : "🌙";
+        };
         btn.addEventListener("click", () => {
           const next =
             (html.getAttribute("data-theme") || "light") === "dark"
@@ -85,9 +77,9 @@
               : "dark";
           html.setAttribute("data-theme", next);
           localStorage.setItem("theme", next);
-          setEmoji();
+          sync();
         });
-        setEmoji();
+        sync();
       })();
     </script>
   </body>

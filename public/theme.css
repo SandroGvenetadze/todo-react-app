@@ -1,0 +1,148 @@
+/* Theme tokens (light) */
+:root {
+  --bg: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+
+  --accent: #4f46e5; /* used for focus/hover details */
+  --accent-weak: rgba(79, 70, 229, 0.12);
+  --radius: 12px;
+  --shadow: 0 8px 22px rgba(2, 6, 23, 0.08);
+}
+
+/* Theme tokens (dark) */
+:root[data-theme="dark"] {
+  --bg: #0b1220;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --surface: #111827;
+  --border: #334155;
+
+  --accent: #a5b4fc;
+  --accent-weak: rgba(165, 180, 252, 0.14);
+  --shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Base paint — does not alter layout */
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Typical containers (soft card look if your classes exist) */
+[class*="card"],
+[class*="toolbar"],
+[class*="panel"] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Inputs — keep your layout, only colors/focus */
+input,
+select,
+textarea {
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-weak);
+}
+
+/* Buttons — subtle hover/press effects */
+button,
+.btn,
+[role="button"] {
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.2s ease,
+    border-color 0.2s ease;
+}
+button:hover,
+.btn:hover,
+[role="button"]:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
+}
+button:active,
+.btn:active,
+[role="button"]:active {
+  transform: translateY(0);
+}
+
+/* Pills / chips if present */
+[class*="chip"],
+[class*="pill"],
+[class*="badge"] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 999px;
+  transition: background 0.2s, border-color 0.2s;
+}
+[class*="chip"]:hover,
+[class*="pill"]:hover,
+[class*="badge"]:hover {
+  background: var(--accent-weak);
+  border-color: var(--accent);
+}
+
+/* List rows hover (if your items have 'item' in class) */
+[class*="item"] {
+  transition: background 0.15s ease;
+}
+[class*="item"]:hover {
+  background: color-mix(in oklab, var(--surface), var(--accent) 6%);
+}
+
+/* Links — neat underline animation */
+a {
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+}
+a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1.5px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s ease;
+}
+a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Small scroll polish */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
