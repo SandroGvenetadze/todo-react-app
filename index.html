@@ -6,9 +6,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My ToDo List</title>
     <meta name="color-scheme" content="light dark" />
+
+    <script>
+      // Set theme from localStorage or system preference
+      (function () {
+        const saved = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const theme = saved || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+
+    <style>
+      /* Dark mode via filter only on #root (non-invasive) */
+      html[data-theme="dark"] #root {
+        filter: invert(1) hue-rotate(180deg);
+      }
+      /* Revert media so images/icons don't look inverted */
+      html[data-theme="dark"] #root img,
+      html[data-theme="dark"] #root video,
+      html[data-theme="dark"] #root picture,
+      html[data-theme="dark"] #root iframe,
+      html[data-theme="dark"] #root canvas,
+      html[data-theme="dark"] #root svg {
+        filter: invert(1) hue-rotate(180deg);
+      }
+
+      /* Small toggle button in the top-right (outside #root) */
+      .theme-toggle {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid #c9ccd1;
+        background: #ffffff;
+        color: #111;
+        font-size: 16px;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        z-index: 1000;
+      }
+      html[data-theme="dark"] .theme-toggle {
+        background: #1f2937;
+        color: #e5e7eb;
+        border-color: #374151;
+      }
+      .theme-toggle:hover {
+        opacity: 0.9;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Small theme toggle (outside #root so filters don't affect it) -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      🌓
+    </button>
+
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Toggle theme and save
+      (function () {
+        const html = document.documentElement;
+        const btn = document.getElementById("theme-toggle");
+        const setEmoji = () =>
+          (btn.textContent =
+            html.getAttribute("data-theme") === "dark" ? "🌞" : "🌙");
+        btn.addEventListener("click", () => {
+          const next =
+            (html.getAttribute("data-theme") || "light") === "dark"
+              ? "light"
+              : "dark";
+          html.setAttribute("data-theme", next);
+          localStorage.setItem("theme", next);
+          setEmoji();
+        });
+        setEmoji();
+      })();
+    </script>
   </body>
 </html>
